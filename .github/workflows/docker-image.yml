@@ -13,7 +13,7 @@ jobs:
     steps:
     - name: set tag date variable
       id: datetag
-      run: echo "::set-output name=datetag::$(date +'%s')"
+      run: echo "::set-output name=datetag::$(date +'%Y%m%d%H%M%S')"
     - name: Checkout
       uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
