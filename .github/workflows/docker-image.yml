@@ -30,6 +30,6 @@ jobs:
         push: true
         tags: |
             ${{ github.repository_owner }}/adc-certupdater-letsencrypt:latest
-            ${{ github.repository_owner }}/adc-certupdater-letsencrypt:${{ steps.date.outputs.datetag }}
+            ${{ github.repository_owner }}/adc-certupdater-letsencrypt:${{ steps.datetag.outputs.datetag }}
             ghcr.io/${{ github.repository_owner }}/adc-certupdater-letsencrypt:latest
-            ghcr.io/${{ github.repository_owner }}/adc-certupdater-letsencrypt:${{ steps.date.outputs.datetag }}
+            ghcr.io/${{ github.repository_owner }}/adc-certupdater-letsencrypt:${{ steps.datetag.outputs.datetag }}
