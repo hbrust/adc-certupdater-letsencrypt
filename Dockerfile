@@ -7,7 +7,7 @@ RUN apt-get update && \
     apt-get install --no-install-recommends -y ca-certificates python3 python3-requests git openssl curl
 
 # clone dehydrated
-RUN git clone https://github.com/lukas2511/dehydrated.git /opt/dehydrated && \
+RUN git clone https://github.com/dehydrated-io/dehydrated.git /opt/dehydrated && \
     mkdir -p /var/www/dehydrated && \
     mkdir -p /config && \
     mkdir -p /storage
@@ -19,5 +19,3 @@ COPY ["citrix-adc_hooks.py", "config-adc.example", "/opt/adc-hook/"]
 COPY letsencrypt-start.sh /
 
 CMD ./letsencrypt-start.sh
-
-
