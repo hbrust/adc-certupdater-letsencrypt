@@ -11,6 +11,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: set tag date variable
+      id: datetag
+      run: echo "::set-output name=datetag::$(date +'%s')"
     - name: Checkout
       uses: actions/checkout@v2
     - name: Login to GitHub Container Registry
@@ -27,6 +30,6 @@ jobs:
         push: true
         tags: |
             ${{ github.repository_owner }}/adc-certupdater-letsencrypt:latest
-            ${{ github.repository_owner }}/adc-certupdater-letsencrypt:$(date +%s)
+            ${{ github.repository_owner }}/adc-certupdater-letsencrypt:${{ steps.date.outputs.datetag }}
             ghcr.io/${{ github.repository_owner }}/adc-certupdater-letsencrypt:latest
-            ghcr.io/${{ github.repository_owner }}/adc-certupdater-letsencrypt:$(date +%s)
+            ghcr.io/${{ github.repository_owner }}/adc-certupdater-letsencrypt:${{ steps.date.outputs.datetag }}
