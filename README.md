@@ -33,9 +33,11 @@ You need to provide mounts for
 You can run it with the following command
 
 ```
-docker run --name certupdater \
+docker create
+        --name certupdater \
         -v "config_data:/config" \
         -v "cert_data:/storage"  \
+        --restart unless-stopped \
         ghcr.io/hbrust/adc-certupdater-letsencrypt:latest
 ```
 
