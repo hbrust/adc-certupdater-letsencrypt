@@ -13,8 +13,8 @@ At the moment `http-01` challenges are supported only. All configuration is done
 
 There are two configuration files needed for a valid configuration.
 
-1. The `.conf` file. See the `config-adc.example` files
-2. A domains file referenced in the `.conf` file. This file contains all doamin names for the certificate (Subject Alternative Names) in one line divided by space. Any change in this files execute a renewal of the certificate.
+1. The `.cfg` file. See the `config-adc.example` files
+2. A domains file referenced in the `.cfg` file. This file contains all doamin names for the certificate (Subject Alternative Names) in one line divided by space. Any change in this files execute a renewal of the certificate.
 
 The container tries in a intervall if 5 minutes to renew the certificates. A renewal will be exectuted if
 * the certificates become invalid in the next 30 days
@@ -27,7 +27,7 @@ You can pull it via Github Registry:
 ## Deployment
 
 You need to provide mounts for
-* `/config`: this directory is searched for `.conf` files and domain name files
+* `/config`: this directory is searched for `.cfg` files and domain name files
 * `/storage`: this is the directory where Dehydrated will store all ACME stuff (identities, certificates)
 
 You can run it with the following command
