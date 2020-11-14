@@ -18,4 +18,7 @@ COPY ["citrix-adc_hooks.py", "config-adc.example", "/opt/adc-hook/"]
 # copy CMD script
 COPY letsencrypt-start.sh /
 
+# change execution rights
+RUN chmod +x /letsencrypt-start.sh
+
 CMD ./letsencrypt-start.sh
