@@ -6,10 +6,10 @@
 import sys
 whattodo = sys.argv[1]
 if not (whattodo == "deploy_challenge" or whattodo == "deploy_cert" or whattodo == "clean_challenge"):
-   exit(0) 
+   exit(0)
 
 #Imports
-import os, json, requests, base64, importlib
+import os, json, requests, base64, importlib, time
 from urllib.parse import quote_plus
 # disable cert warnings
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -18,7 +18,7 @@ requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 # get config file path
 cfgfile = os.environ['CONFIG']
 
-# loader function for config file 
+# loader function for config file
 def import_path(path):
     module_name = os.path.basename(path).replace('-', '_')
     spec = importlib.util.spec_from_loader(
@@ -211,6 +211,20 @@ def createSSLCA(connectiontype,timeout,nitroNSIP,authToken,nscert,nspairname):
    response = requests.post(url, data=payload, headers=headers, verify=False, timeout=timeout)
    print (" ++ Hook %s: create CA cert - %s" % (sys.argv[0], response.reason))
 
+def updateSSLCA(connectiontype,timeout,nitroNSIP,authToken, nscert, nspairname):
+   url = '%s://%s/nitro/v1/config/sslcertkey?action=update' % (connectiontype, nitroNSIP)
+   headers = {'Content-type': 'application/json','Cookie': authToken}
+   json_string = {
+   "sslcertkey": {
+       "certkey": nspairname,
+       "cert": nscert,
+       "nodomaincheck": True,}
+   }
+   payload = json.dumps(json_string)
+   response = requests.post(url, data=payload, headers=headers, verify=False, timeout=timeout)
+   print (" ++ Hook %s: update SSL CA cert %s - %s" % (sys.argv[0], nspairname, response.reason))
+   return response
+
 def linkSSL(connectiontype,timeout,nitroNSIP,authToken, nschainname, nspairname):
    url = '%s://%s/nitro/v1/config/sslcertkey?action=link' % (connectiontype, nitroNSIP)
    headers = {'Content-type': 'application/json','Cookie': authToken}
@@ -238,7 +252,17 @@ if whattodo == "deploy_cert":
       removeFile(connectiontype,nstimeout,nitroNSIP,authToken,nskey,nscertpath)
       sendFile(connectiontype,nstimeout,nitroNSIP,authToken,nscert,localcert,nscertpath)
       sendFile(connectiontype,nstimeout,nitroNSIP,authToken,nskey,localkey,nscertpath)
+      # check for new modified cert chain (modification time lower than 5min)
+      if time.time() - os.stat(localchain).st_mtime < 600:
+          update_CA = True
+      else:
+          update_CA = False
+      if update_CA:
+          sendFile(connectiontype,nstimeout,nitroNSIP,authToken,nschain,localchain,nscertpath)
+          updateSSLCA(connectiontype,nstimeout,nitroNSIP,authToken, nschain, nschainname)
       updateSSL(connectiontype,nstimeout,nitroNSIP,authToken, nscert, nskey, nspairname)
+      if update_CA:
+          linkSSL(connectiontype,nstimeout,nitroNSIP,authToken, nschainname, nspairname)
       SaveNSConfig(connectiontype,nstimeout,nitroNSIP,authToken)
    else:
       print (" ++ Create certificate on ADC")
@@ -262,7 +286,7 @@ elif whattodo == "deploy_challenge":
 elif whattodo == "clean_challenge":
    authToken = getAuthCookie(connectiontype,nstimeout,nitroNSIP,nitroUser,nitroPass)
    # remove entries from stringmap
-   token_filename = sys.argv[3] 
+   token_filename = sys.argv[3]
    stringmapEntryRemove(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,token_filename)
    # logout after  work
    logOut(connectiontype,nstimeout,nitroNSIP,authToken)
