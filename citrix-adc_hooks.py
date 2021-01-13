@@ -253,39 +253,16 @@ if whattodo == "deploy_cert":
    logOut(connectiontype,nstimeout,nitroNSIP,authToken)
 elif whattodo == "deploy_challenge":
    authToken = getAuthCookie(connectiontype,nstimeout,nitroNSIP,nitroUser,nitroPass)
-   # with HOOK_CHAIN=yes, some more to do
-   if False: #cfg.HOOK_CHAIN == "yes":
-      list = sys.argv
-      # Remove app name
-      list.pop(0)
-      # Remove whattodo
-      list.pop(0)
-      # iterate through list schema 'domain' 'token_name' 'token_value'
-      while len(list) != 0:
-         stringmapEntryCreate(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,list[1],list[2])
-   else:
-      token_filename = sys.argv[3]
-      token_value = sys.argv[4]
-
-   #respPol(connectiontype,nstimeout,nitroNSIP,authToken,nsresppol,token_filename)
-   #respAct(connectiontype,nstimeout,nitroNSIP,authToken,nsrespact,token_value)
-      stringmapEntryCreate(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,token_filename,token_value)
+   # create entries from stringmap
+   token_filename = sys.argv[3]
+   token_value = sys.argv[4]
+   stringmapEntryCreate(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,token_filename,token_value)
    # logout after work
    logOut(connectiontype,nstimeout,nitroNSIP,authToken)
 elif whattodo == "clean_challenge":
    authToken = getAuthCookie(connectiontype,nstimeout,nitroNSIP,nitroUser,nitroPass)
-   # more to do to enable config chain
-   if False: # cfg.HOOK_CHAIN == "yes":
-      list = sys.argv
-      # Remove app name
-      list.pop(0)
-      # Remove whattodo
-      list.pop(0)
-      # iterate through list schema 'domain' 'token_name' 'token_value'
-      while len(list) != 0:
-         stringmapEntryRemove(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,list[1])
-   else:
-      token_filename = sys.argv[3] 
-      stringmapEntryRemove(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,token_filename)
+   # remove entries from stringmap
+   token_filename = sys.argv[3] 
+   stringmapEntryRemove(connectiontype,nstimeout,nitroNSIP,authToken,stringmapname,token_filename)
    # logout after  work
    logOut(connectiontype,nstimeout,nitroNSIP,authToken)
