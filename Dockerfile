@@ -14,6 +14,7 @@ RUN git clone https://github.com/dehydrated-io/dehydrated.git /opt/dehydrated &&
 
 # copy ADC hooks
 COPY ["citrix-adc_hooks.py", "config-adc.example", "/opt/adc-hook/"]
+RUN chmod +x /opt/adc-hook/citrix-adc_hooks.py
 
 # copy CMD script
 COPY letsencrypt-start.sh /
