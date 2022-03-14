@@ -11,6 +11,7 @@ RUN apt-get update && \
 RUN mkdir -p /opt/dehydrated && \
     wget https://github.com/dehydrated-io/dehydrated/releases/download/v${DEHYDRATED_VER}/dehydrated-${DEHYDRATED_VER}.tar.gz -O /tmp/dehydrated-${DEHYDRATED_VER}.tar.gz && \
     tar -xzf /tmp/dehydrated-${DEHYDRATED_VER}.tar.gz --directory /opt/dehydrated && \
+    ln -s /opt/dehydrated/dehydrated-${DEHYDRATED_VER}/dehydrated opt/dehydrated/dehydrated && \
     mkdir -p /var/www/dehydrated && \
     mkdir -p /config && \
     mkdir -p /storage
