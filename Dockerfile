@@ -1,6 +1,6 @@
 FROM debian:stable
 Maintainer Helge Brust <helge@labbifant.de>
-DEHYDRATED_VER="0.7.0"
+ARG DEHYDRATED_VER="0.7.0"
 
 # install tools
 RUN apt-get update && \
