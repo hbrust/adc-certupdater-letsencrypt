@@ -1,13 +1,15 @@
 FROM debian:stable
 Maintainer Helge Brust <helge@labbifant.de>
+DEHYDRATED_VER="0.7.0"
 
-# install git
+# install tools
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install --no-install-recommends -y ca-certificates python3 python3-requests git openssl curl
+    apt-get install --no-install-recommends -y ca-certificates wget python3 python3-requests git openssl curl
 
-# clone dehydrated
-RUN git clone https://github.com/dehydrated-io/dehydrated.git /opt/dehydrated && \
+# get dehydrated from release
+RUN wget https://github.com/dehydrated-io/dehydrated/releases/download/v${DEHYDRATED_VER}/dehydrated-${DEHYDRATED_VER}.tar.gz -O /tmp/dehydrated-${DEHYDRATED_VER}.tar.gz && \
+    tar -xzf /tmp/dehydrated-${DEHYDRATED_VER}.tar.gz --directory /opt/dehydrated && \
     mkdir -p /var/www/dehydrated && \
     mkdir -p /config && \
     mkdir -p /storage
